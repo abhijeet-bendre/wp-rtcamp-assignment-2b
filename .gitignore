@@ -1,0 +1,7 @@
+.travis.yml
+phpcs.ruleset.xml
+phpunit.xml.dist
+.jshintrc
+LICENSE.md
+
+/bin

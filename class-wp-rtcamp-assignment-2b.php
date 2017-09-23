@@ -42,6 +42,9 @@ class Wp_Rtcamp_Assignment_2b {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'wprtc_setup_contributors_metabox' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
+
+		// 'save_post' callback for saving selected_contributors.
+		add_action( 'save_post', array( $this, 'wprtc_save_selected_contributors' ), 10 );
 	}
 
 
@@ -88,29 +91,76 @@ class Wp_Rtcamp_Assignment_2b {
 	 * @since 0.1
 	 */
 	public function wprtc_render_contributors_metabox() {
-		ob_start();
+		global $post;
 		$all_users = get_users();
+		$contributors_nonce = wp_create_nonce( '_wprtc_contributors_nonce' );
 		//var_dump($all_users);
+		$post_contributors = get_post_meta( $post->ID, '_wprtc_contributors' );
+		var_dump($post_contributors);
+		if ( ! empty( $post_contributors ) ) {
+			$post_contributors = $post_contributors[0];
+		}
+
 		if ( ! empty( $all_users ) ) {
+			ob_start();
 			echo "<table class='wprtc_contributors_table' cellspacing='0'>
-							<thead>
+							<thead class='wprtc_contributors_thead'>
 								<tr>
-									<th class='wprtc_contributors_head' scope='col'></th>
-					 				<th class='wprtc_contributors_head' scope='col'>Author Name</th>
-					 				<th class='wprtc_contributors_head' scope='col'>Gravatar</th>
+									<th scope='col'></th>
+					 				<th scope='col'>Author Name</th>
+					 				<th scope='col'>Gravatar</th>
 								</tr>
 							</thead>
-							<tbody>";
-			foreach ( $all_users as $all_users_key => $all_users_value ) {
+							<tbody class='wprtc_contributors_tbody'>";
+			foreach ( $all_users as $single_user ) {
+
 				echo "<tr>
-        					<td class=''><input type='checkbox' name='_wprtc_contributor' value='" . esc_attr( $all_users_value->ID ) . "'></td>
-        					<td class=''>$all_users_value->user_login</td>
-									<td class=''>" . get_avatar( $all_users_value->ID, 32 ) . '</td>
+        					<td class=''>
+										<input type='checkbox' name='_wprtc_contributors[]' value='" . esc_attr( $single_user->ID ) . "' " . checked( in_array( $single_user->ID, $post_contributors ), true, false ) . ">
+									</td>
+        					<td class=''>$single_user->user_login</td>
+									<td class=''>" . get_avatar( $single_user->ID, 100 ) . '</td>
         			</tr>';
 			}
-			echo '</tbody></table>';
+			echo "</tbody>
+				<input type='hidden' name='_wprtc_contributor_metabox_nonce' value='" . esc_attr( $contributors_nonce ) . "'/>
+			</table>";
 			ob_get_flush();
 		}
+	}
+
+	/**
+	 * 'save_post' callback for saving selected Contributors.
+	 *
+	 * @param int $post_id Post Id.
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_save_selected_contributors( $post_id ) {
+		global $post;
+		$wprtc_post_contributors = array();
+
+		/*
+		* Check if valid post_type.
+		*/
+		if ( isset( $_POST['post_type'] ) ) { // Input var okay.
+			if ( 'post' !== sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) ) { // Input var okay.
+				return;
+			}
+		}
+		foreach ( $_POST as $post_key => $post_value ) { // Input var okay.
+			// $key is input hidden, $value is attachment id.
+			if ( strpos( $post_key, '_wprtc_contributors' ) !== false ) {
+				$wprtc_post_contributors = $post_value;
+				// Build Slides array to save in to post meta.
+				array_walk( $wprtc_post_contributors, function( &$wprtc_value, &$wprtc_key ) {
+						$wprtc_post_contributors[ $wprtc_key ] = $wprtc_value;
+				});
+			}
+		}
+		// Update contributors list.
+		update_post_meta( $post_id, '_wprtc_contributors', $wprtc_post_contributors );
+
 	}
 }
 

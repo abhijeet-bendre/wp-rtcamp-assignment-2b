@@ -41,6 +41,36 @@ class Wp_Rtcamp_Assignment_2b {
 	 */
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'wprtc_setup_contributors_metabox' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
+	}
+
+
+	/**
+	 * Init assets such as JS/CSS, required by plugin
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_init_assets() {
+		global $pagenow;
+
+		/*
+		 * Register and Enqueue Style/Scripts only on post_type 'post'.
+		 *
+		 * Check if $_GET['post_type'] exists. For "All Posts/ Add new Post" screen .
+		 *	or
+		 * Check if $_GET['post'] exists. (For Edit Post Screen).
+		 */
+		$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay. WPCS: CSRF ok.
+		$post_id = isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : ''; // Input var okay. WPCS: CSRF ok.
+
+		if ( ( 'post' === $post_type && in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) )
+				||
+				( 'post.php' === $pagenow && 'post' === get_post_type( $post_id ) )
+			) {
+			// Register and Enqueue Style.
+			wp_register_style( 'wprtc_contributors_main_2b_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_contributors_main_2b.css', null );
+			wp_enqueue_style( 'wprtc_contributors_main_2b_css' );
+		}
 	}
 
 	/**

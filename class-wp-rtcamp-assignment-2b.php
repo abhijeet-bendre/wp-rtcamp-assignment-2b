@@ -126,9 +126,9 @@ class Wp_Rtcamp_Assignment_2b {
 				if ( (int) $post->post_author !== $single_user->ID ) {
 					echo "<tr>
         					<td class=''>
-										<input type='checkbox' name='_wprtc_contributors[]' value='" . esc_attr( $single_user->ID ) . "' " . checked( in_array( $single_user->ID, $post_contributors ), true, false ) . ">
+										<input type='checkbox' name='_wprtc_contributors[]' value='" . esc_attr( $single_user->ID ) . "' " . checked( in_array( (string) $single_user->ID, $post_contributors , true ), true, false ) . ">
 									</td>
-        					<td class=''>$single_user->user_login</td>
+        					<td class=''>" . esc_html( $single_user->user_login ) . "</td>
 									<td class=''>" . get_avatar( $single_user->ID, 75 ) . '</td>
         				</tr>';
 				}

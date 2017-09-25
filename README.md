@@ -13,16 +13,20 @@ From here: https://careers.rtcamp.com/wordpress-engineer/assignment/
 
 ###  Admin-Side:
 
-    Addd a new metabox, labeled "Contributors" to WordPress post-editor page. This metabox will display list of authors (wordpress users) with a checkbox for each author.
-    shows and add/remove images to slide show.
+    Addd a new metabox, labeled "Contributors" to WordPress post-editor page. This metabox will display list of 
+    authors (wordpress users) with a checkbox for each author.
     
     User (author/editor/admin) may tick one or more authors name from the list.
+    
     When post saves, states of checkboxes for author-list in "Contributors" box is saved as well.
 
 ### Front-end:
 
-    This Plugin uses post-content filter "the_content". At the end of post, a box called "Contributors". is displayed 
-    Post contributor names with their Gravatars are shown and theire names are clickable and will link to their respective "author" page.
+    This Plugin uses post-content filter "the_content". At the end of post, a box called "Contributors". 
+    is displayed.
+    
+    Post contributor names with their Gravatars are shown and theire names are clickable and will link
+    to their respective "author" page.
 
 
 ### Installation:

@@ -22,8 +22,8 @@ Text Domain: wprtc_assignment_2b
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-define( 'WPRTC_2B_PLUGIN_NAME', 'wp-rtcamp-assignment-2b' );
-define( 'WPRTC_2B_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+define( 'WPRTC_2B_CONTRIBUTORS_PLUGIN_NAME', 'wp-rtcamp-assignment-2b' );
+define( 'WPRTC_2B_CONTRIBUTORS_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 
 /**
  * RtCamp Assignment 2b Class.

@@ -110,7 +110,7 @@ class Wp_Rtcamp_Assignment_2b {
 		if ( ! empty( $post_contributors ) ) {
 			$post_contributors = $post_contributors[0];
 		}
-		
+
 		if ( ! empty( $all_users ) ) {
 			ob_start();
 			echo "<table class='wprtc_contributors_table' cellspacing='0'>
@@ -186,15 +186,17 @@ class Wp_Rtcamp_Assignment_2b {
 		$post_contributors = '';
 
 		if ( is_single() ) {
+			$content .= "<div class='wprtc_contributor_wrapper'>";
+			$content .= "<p class='wprtc_title'>" . esc_html__( 'Contributors' , 'wprtc_assignment_2b' ) . ':</p>';
 			$content .= $this->wprtc_display_contributors_box( $post->post_author );
 			$post_contributors = get_post_meta( $post->ID, '_wprtc_contributors' );
-
 			if ( ! empty( $post_contributors ) ) {
 				$post_contributors = $post_contributors[0];
 				foreach ( $post_contributors as $contributor_id ) {
 					$content .= $this->wprtc_display_contributors_box( $contributor_id );
 				}
 			}
+			$content .= '</div>';
 			// Returns the content.
 			return $content;
 		}
@@ -203,7 +205,7 @@ class Wp_Rtcamp_Assignment_2b {
 	/**
 	 * Render Contributor info box.
 	 *
-	 * @param int $contributor Contains id of or post contributor.
+	 * @param int $contributor_id Contains id of or post contributor.
 	 *
 	 * @since 0.1
 	 */

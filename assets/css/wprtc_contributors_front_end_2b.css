@@ -1,8 +1,18 @@
 /* Contain floats*/
+.wprtc_contributor_wrapper {
+  background-color: #f5f5f5;
+  padding: 10px;
+}
+
+.wprtc_contributor_wrapper p.wprtc_title {
+  font-weight: bold;
+}
+
 .wprtc_contributor_box_wrapper {
   content: "";
   display: table;
   width: 100%;
+  margin-bottom: 15px;
 }
 
 .wprtc_contributor_box_wrapper:after {
@@ -12,7 +22,7 @@
 .wprtc_contributor_gravatar {
   float: left;
   width: 20%;
-  padding: 10px 0 0 0px;
+  padding: 5px;
 }
 
 .wprtc_contributor_details {

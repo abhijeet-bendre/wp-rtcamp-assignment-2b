@@ -169,6 +169,7 @@ class Wp_Rtcamp_Assignment_2b {
 				return;
 			}
 		}
+
 		foreach ( $_POST as $post_key => $post_value ) { // Input var okay.
 			// $key is input hidden, $value is attachment id.
 			if ( strpos( $post_key, '_wprtc_contributors' ) !== false ) {

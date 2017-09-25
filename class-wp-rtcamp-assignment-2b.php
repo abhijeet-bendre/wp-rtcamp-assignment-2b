@@ -110,7 +110,7 @@ class Wp_Rtcamp_Assignment_2b {
 		if ( ! empty( $post_contributors ) ) {
 			$post_contributors = $post_contributors[0];
 		}
-
+		
 		if ( ! empty( $all_users ) ) {
 			ob_start();
 			echo "<table class='wprtc_contributors_table' cellspacing='0'>
@@ -123,13 +123,16 @@ class Wp_Rtcamp_Assignment_2b {
 							</thead>
 							<tbody class='wprtc_contributors_tbody'>";
 			foreach ( $all_users as $single_user ) {
-				echo "<tr>
+				// Skip Post Author, since he is always a contributor.
+				if ( (int) $post->post_author !== $single_user->ID ) {
+					echo "<tr>
         					<td class=''>
 										<input type='checkbox' name='_wprtc_contributors[]' value='" . esc_attr( $single_user->ID ) . "' " . checked( in_array( $single_user->ID, $post_contributors ), true, false ) . ">
 									</td>
         					<td class=''>$single_user->user_login</td>
 									<td class=''>" . get_avatar( $single_user->ID, 75 ) . '</td>
-        			</tr>';
+        				</tr>';
+				}
 			}
 			echo "</tbody>
 				<input type='hidden' name='_wprtc_contributor_metabox_nonce' value='" . esc_attr( $contributors_nonce ) . "'/>

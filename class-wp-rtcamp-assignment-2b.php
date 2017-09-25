@@ -45,8 +45,8 @@ class Wp_Rtcamp_Assignment_2b {
 
 		// 'save_post' callback for saving selected_contributors.
 		add_action( 'save_post', array( $this, 'wprtc_save_selected_contributors' ), 10 );
+		add_filter( 'the_content', array( $this, 'wprtc_append_contributors' ), 20 );
 	}
-
 
 	/**
 	 * Init assets such as JS/CSS, required by plugin
@@ -113,13 +113,12 @@ class Wp_Rtcamp_Assignment_2b {
 							</thead>
 							<tbody class='wprtc_contributors_tbody'>";
 			foreach ( $all_users as $single_user ) {
-
 				echo "<tr>
         					<td class=''>
 										<input type='checkbox' name='_wprtc_contributors[]' value='" . esc_attr( $single_user->ID ) . "' " . checked( in_array( $single_user->ID, $post_contributors ), true, false ) . ">
 									</td>
         					<td class=''>$single_user->user_login</td>
-									<td class=''>" . get_avatar( $single_user->ID, 100 ) . '</td>
+									<td class=''>" . get_avatar( $single_user->ID, 75 ) . '</td>
         			</tr>';
 			}
 			echo "</tbody>
@@ -160,7 +159,71 @@ class Wp_Rtcamp_Assignment_2b {
 		}
 		// Update contributors list.
 		update_post_meta( $post_id, '_wprtc_contributors', $wprtc_post_contributors );
+	}
 
+	/**
+	 * Append_contributors box to post.
+	 *
+	 * @param int $content Post Id.
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_append_contributors( $content ) {
+		global $post;
+		$post_contributors = '';
+
+		if ( is_single() ) {
+			$content .= $this->wprtc_display_contributors_box( $post->post_author );
+			$post_contributors = get_post_meta( $post->ID, '_wprtc_contributors' );
+			var_dump($post_contributors);
+			if ( ! empty( $post_contributors ) ) {
+				$post_contributors = $post_contributors[0];
+				foreach ( $post_contributors as $contributor_id ) {
+					$content .= $this->wprtc_display_contributors_box( $contributor_id );
+				}
+			}
+			// Returns the content.
+			return $content;
+		}
+	}
+
+	/**
+	 * Render Contributor info box.
+	 *
+	 * @param int $contributor Contains id of or post contributor.
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_display_contributors_box( $contributor ) {
+
+		$post_contributor_display_name = '';
+		$post_contributor_description = '';
+		$post_contributor_website = '';
+
+		$post_contributor_display_name = get_the_author_meta( 'display_name', $contributor );
+
+		 // If display name is not available then use nickname as display name.
+		if ( empty( $post_contributor_display_name ) ) {
+			 $post_contributor_display_name = get_the_author_meta( 'nickname', $contributor );
+		}
+
+		// Get biographical information or description.
+		$post_contributor_description = get_the_author_meta( 'user_description', $contributor );
+
+		// Get website URL.
+		$post_contributor_website = get_the_author_meta( 'url', $contributor );
+
+		$contributor_box = "<div class='wprtc_contributor_box_wrapper'>
+													<div class='wprtc_contributor_gravatar'>"
+														. get_avatar( $contributor, 75 ) .
+													"</div>
+													<div class='wprtc_contributor_details'>
+														<p> " . $post_contributor_display_name . '</p>
+														<p> ' . $post_contributor_description . '</p>
+														<p> ' . $post_contributor_website . '</p>
+													</div>
+									</div>';
+		return $contributor_box;
 	}
 }
 

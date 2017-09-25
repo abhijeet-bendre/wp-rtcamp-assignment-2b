@@ -1,0 +1,31 @@
+/* Contain floats*/
+.wprtc_contributor_box_wrapper {
+  content: "";
+  display: table;
+  width: 100%;
+  text-align: center;
+}
+
+.wprtc_contributor_box_wrapper:after {
+  clear: both;
+}
+
+.wprtc_contributor_gravatar {
+  float: left;
+  width: 35%;
+}
+
+.wprtc_image_preview img {
+  width: 100%;
+}
+
+.wprtc_contributor_details {
+  padding: 25px;
+  float: left;
+  width: 56%;
+}
+
+.wprtc_contributor_details p{
+  display: inline-block;
+
+}

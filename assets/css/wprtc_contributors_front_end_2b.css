@@ -3,7 +3,6 @@
   content: "";
   display: table;
   width: 100%;
-  text-align: center;
 }
 
 .wprtc_contributor_box_wrapper:after {
@@ -12,20 +11,16 @@
 
 .wprtc_contributor_gravatar {
   float: left;
-  width: 35%;
-}
-
-.wprtc_image_preview img {
-  width: 100%;
+  width: 20%;
+  padding: 10px 0 0 0px;
 }
 
 .wprtc_contributor_details {
-  padding: 25px;
+  padding: 10px 0 0 0px;
   float: left;
-  width: 56%;
+  width: 80%;
 }
 
 .wprtc_contributor_details p{
   display: inline-block;
-
 }

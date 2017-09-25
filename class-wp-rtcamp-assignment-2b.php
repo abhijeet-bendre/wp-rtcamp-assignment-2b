@@ -107,7 +107,6 @@ class Wp_Rtcamp_Assignment_2b {
 		$contributors_nonce = wp_create_nonce( '_wprtc_contributors_nonce' );
 		//var_dump($all_users);
 		$post_contributors = get_post_meta( $post->ID, '_wprtc_contributors' );
-		var_dump($post_contributors);
 		if ( ! empty( $post_contributors ) ) {
 			$post_contributors = $post_contributors[0];
 		}
@@ -186,7 +185,7 @@ class Wp_Rtcamp_Assignment_2b {
 		if ( is_single() ) {
 			$content .= $this->wprtc_display_contributors_box( $post->post_author );
 			$post_contributors = get_post_meta( $post->ID, '_wprtc_contributors' );
-			var_dump($post_contributors);
+
 			if ( ! empty( $post_contributors ) ) {
 				$post_contributors = $post_contributors[0];
 				foreach ( $post_contributors as $contributor_id ) {
@@ -205,35 +204,36 @@ class Wp_Rtcamp_Assignment_2b {
 	 *
 	 * @since 0.1
 	 */
-	public function wprtc_display_contributors_box( $contributor ) {
+	public function wprtc_display_contributors_box( $contributor_id ) {
 
 		$post_contributor_display_name = '';
 		$post_contributor_description = '';
 		$post_contributor_website = '';
 
-		$post_contributor_display_name = get_the_author_meta( 'display_name', $contributor );
+		$post_contributor_display_name = get_the_author_meta( 'display_name', $contributor_id );
 
 		 // If display name is not available then use nickname as display name.
 		if ( empty( $post_contributor_display_name ) ) {
-			 $post_contributor_display_name = get_the_author_meta( 'nickname', $contributor );
+			 $post_contributor_display_name = get_the_author_meta( 'nickname', $contributor_id );
 		}
 
 		// Get biographical information or description.
-		$post_contributor_description = get_the_author_meta( 'user_description', $contributor );
+		$post_contributor_description = get_the_author_meta( 'user_description', $contributor_id );
 
 		// Get website URL.
-		$post_contributor_website = get_the_author_meta( 'url', $contributor );
+		$post_contributor_website = get_the_author_meta( 'url', $contributor_id );
 
 		$contributor_box = "<div class='wprtc_contributor_box_wrapper'>
-													<div class='wprtc_contributor_gravatar'>"
-														. get_avatar( $contributor, 75 ) .
-													"</div>
+													<div class='wprtc_contributor_gravatar'>
+														<a href='" . get_author_posts_url( $contributor_id ) . "'>" . get_avatar( $contributor_id, 75 ) . "</a>
+													</div>
 													<div class='wprtc_contributor_details'>
-														<p> " . $post_contributor_display_name . '</p>
+														<p><a href='" . get_author_posts_url( $contributor_id ) . "'>" . $post_contributor_display_name . '</a></p>
 														<p> ' . $post_contributor_description . '</p>
 														<p> ' . $post_contributor_website . '</p>
 													</div>
-									</div>';
+												</div>';
+
 		return $contributor_box;
 	}
 }

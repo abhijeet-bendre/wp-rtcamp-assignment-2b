@@ -104,13 +104,12 @@ class Wp_Rtcamp_Assignment_2b {
 	public function wprtc_render_contributors_metabox() {
 		global $post;
 		$all_users = get_users();
-		$contributors_nonce = wp_create_nonce( '_wprtc_contributors_nonce' );
-		//var_dump($all_users);
+		$contributors_nonce = wp_create_nonce( '_wprtc_contributor_metabox_nonce' );
+
 		$post_contributors = get_post_meta( $post->ID, '_wprtc_contributors' );
 		if ( ! empty( $post_contributors ) ) {
 			$post_contributors = $post_contributors[0];
 		}
-
 		if ( ! empty( $all_users ) ) {
 			ob_start();
 			echo "<table class='wprtc_contributors_table' cellspacing='0'>
@@ -151,6 +150,16 @@ class Wp_Rtcamp_Assignment_2b {
 	public function wprtc_save_selected_contributors( $post_id ) {
 		global $post;
 		$wprtc_post_contributors = array();
+
+		/*
+		* If doing auto save return.
+		* or
+		* Verify Nonce, if not verified return.
+		*/
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ||
+				 ( empty( $_POST['_wprtc_contributor_metabox_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wprtc_contributor_metabox_nonce'], '_wprtc_contributor_metabox_nonce' ) ) ) ) ) { // Input var okay.
+			return;
+		}
 
 		/*
 		* Check if valid post_type.

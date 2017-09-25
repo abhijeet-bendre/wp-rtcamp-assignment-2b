@@ -42,14 +42,14 @@ class Wp_Rtcamp_Assignment_2b {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'wprtc_setup_contributors_metabox' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
-
+		add_action( 'wp_enqueue_scripts', array( $this, 'wprtc_init_front_end_assets' ) );
 		// 'save_post' callback for saving selected_contributors.
 		add_action( 'save_post', array( $this, 'wprtc_save_selected_contributors' ), 10 );
 		add_filter( 'the_content', array( $this, 'wprtc_append_contributors' ), 20 );
 	}
 
 	/**
-	 * Init assets such as JS/CSS, required by plugin
+	 * Enqueue assets such as JS/CSS, required by plugin
 	 *
 	 * @since 0.1
 	 */
@@ -74,6 +74,17 @@ class Wp_Rtcamp_Assignment_2b {
 			wp_register_style( 'wprtc_contributors_main_2b_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_contributors_main_2b.css', null );
 			wp_enqueue_style( 'wprtc_contributors_main_2b_css' );
 		}
+	}
+
+	/**
+	 * Enqueue Front-end assets such as JS/CSS, required by plugin
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_init_front_end_assets() {
+		// Register and Enqueue Style.
+		wp_register_style( 'wprtc_contributors_front_end_2b_css', plugin_dir_url( __FILE__ ) . 'assets/css/wprtc_contributors_front_end_2b.css', null );
+		wp_enqueue_style( 'wprtc_contributors_front_end_2b_css' );
 	}
 
 	/**

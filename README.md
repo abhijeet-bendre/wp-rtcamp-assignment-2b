@@ -1,4 +1,4 @@
-===  Assignment-2b: WordPress-Contributors Plugin
+## Assignment-2b: WordPress-Contributors Plugin
 
 * Contributors: (abhijeet-bendre)
 * Requires at least: 4.8.1
@@ -6,7 +6,7 @@
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Plugin for "Assignment-2b: WordPress-Slideshow Plugin"
+Plugin for "Assignment-2b: WordPress-Contributors Plugin"
 From here: https://careers.rtcamp.com/wordpress-engineer/assignment/
 
 ## Description ##

@@ -43,8 +43,7 @@ class Wp_Rtcamp_Assignment_2b {
 		add_action( 'admin_init', array( $this, 'wprtc_setup_contributors_metabox' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'wprtc_init_front_end_assets' ) );
-		// 'save_post' callback for saving selected_contributors.
-		add_action( 'save_post', array( $this, 'wprtc_save_selected_contributors' ), 10 );
+		// Filter for appending contributors box on frontend.
 		add_filter( 'the_content', array( $this, 'wprtc_append_contributors' ), 20 );
 	}
 
@@ -59,14 +58,14 @@ class Wp_Rtcamp_Assignment_2b {
 		/*
 		 * Register and Enqueue Style/Scripts only on post_type 'post'.
 		 *
-		 * Check if $_GET['post_type'] exists. For "All Posts/ Add new Post" screen .
+		 * Check if $_GET['post_type'] exists or $pagenow is post-new.php or edit.php . (For "All Posts/ Add new Post" screen).
 		 *	or
 		 * Check if $_GET['post'] exists. (For Edit Post Screen).
 		 */
 		$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( wp_unslash( $_GET['post_type'] ) ) : ''; // Input var okay. WPCS: CSRF ok.
 		$post_id = isset( $_GET['post'] ) ? sanitize_text_field( wp_unslash( $_GET['post'] ) ) : ''; // Input var okay. WPCS: CSRF ok.
 
-		if ( ( 'post' === $post_type && in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) )
+		if ( ( 'post' === $post_type || in_array( $pagenow, array( 'post-new.php', 'edit.php' ), true ) )
 				||
 				( 'post.php' === $pagenow && 'post' === get_post_type( $post_id ) )
 			) {
@@ -93,7 +92,23 @@ class Wp_Rtcamp_Assignment_2b {
 	 * @since 0.1
 	 */
 	public function wprtc_setup_contributors_metabox() {
-		add_meta_box( 'wprtc_contributors',  __( 'Contributors', 'wprtc_assignment_2b' ), array( $this, 'wprtc_render_contributors_metabox' ), 'post', 'normal', 'low' );
+
+		$whitelist_user_roles = array( 'author', 'editor', 'administrator' );
+		$user = wp_get_current_user();
+		$show_metabox = false;
+		foreach ( $whitelist_user_roles as $role ) {
+			if ( in_array( $role, (array) $user->roles, true ) && false === $show_metabox ) {
+					$show_metabox = true;
+			}
+		}
+
+		// Show Metabox and hook 'save_post' only for author, editor, admin.
+		if ( $show_metabox ) {
+			add_meta_box( 'wprtc_contributors',  __( 'Contributors', 'wprtc_assignment_2b' ), array( $this, 'wprtc_render_contributors_metabox' ), 'post', 'normal', 'low' );
+
+			// 'save_post' callback for saving selected_contributors.
+			add_action( 'save_post', array( $this, 'wprtc_save_selected_contributors' ), 10 );
+		}
 	}
 
 	/**
@@ -110,13 +125,14 @@ class Wp_Rtcamp_Assignment_2b {
 		if ( ! empty( $post_contributors ) ) {
 			$post_contributors = $post_contributors[0];
 		}
+
 		if ( ! empty( $all_users ) ) {
 			ob_start();
 			echo "<table class='wprtc_contributors_table' cellspacing='0'>
 							<thead class='wprtc_contributors_thead'>
 								<tr>
 									<th scope='col'></th>
-					 				<th scope='col'>Author Name</th>
+					 				<th scope='col'>Name</th>
 					 				<th scope='col'>Gravatar</th>
 								</tr>
 							</thead>
@@ -129,7 +145,7 @@ class Wp_Rtcamp_Assignment_2b {
 										<input type='checkbox' name='_wprtc_contributors[]' value='" . esc_attr( $single_user->ID ) . "' " . checked( in_array( (string) $single_user->ID, $post_contributors , true ), true, false ) . ">
 									</td>
         					<td class=''>" . esc_html( $single_user->user_login ) . "</td>
-									<td class=''>" . get_avatar( $single_user->ID, 75 ) . '</td>
+									<td class=''>" . get_avatar( $single_user->ID, 50 ) . '</td>
         				</tr>';
 				}
 			}
@@ -157,7 +173,7 @@ class Wp_Rtcamp_Assignment_2b {
 		* Verify Nonce, if not verified return.
 		*/
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ||
-				 ( empty( $_POST['_wprtc_contributor_metabox_nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wprtc_contributor_metabox_nonce'], '_wprtc_contributor_metabox_nonce' ) ) ) ) ) { // Input var okay.
+				 isset( $_POST['_wprtc_contributor_metabox_nonce'] ) && ! wp_verify_nonce( sanitize_key( $_POST['_wprtc_contributor_metabox_nonce'] ), '_wprtc_contributor_metabox_nonce' ) ) { // Input var okay.
 			return;
 		}
 
@@ -194,8 +210,8 @@ class Wp_Rtcamp_Assignment_2b {
 	public function wprtc_append_contributors( $content ) {
 		global $post;
 		$post_contributors = '';
-
-		if ( is_single() ) {
+		// Check if page is single and 'post_type' is post.
+		if ( is_single() && 'post' === $post->post_type ) {
 			$content .= "<div class='wprtc_contributor_wrapper'>";
 			$content .= "<p class='wprtc_title'>" . esc_html__( 'Contributors' , 'wprtc_assignment_2b' ) . ':</p>';
 			$content .= $this->wprtc_display_contributors_box( $post->post_author );

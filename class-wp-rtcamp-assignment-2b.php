@@ -201,9 +201,9 @@ class Wp_Rtcamp_Assignment_2b {
 		* Show Metabox and hook 'save_post' only for author, editor, admin.
 		*/
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ||
-				 isset( $_POST['_wprtc_contributor_metabox_nonce'] ) && ! wp_verify_nonce( sanitize_key( $_POST['_wprtc_contributor_metabox_nonce'] ), '_wprtc_contributor_metabox_nonce' ) ||
+				 isset( $_POST['_wprtc_contributor_metabox_nonce'] ) && ! wp_verify_nonce( sanitize_key( $_POST['_wprtc_contributor_metabox_nonce'] ), '_wprtc_contributor_metabox_nonce' ) || // Input var okay.
 				 ( ! $show_metabox )
-			 ) { // Input var okay.
+			 ) {
 			return;
 		}
 

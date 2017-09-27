@@ -34,3 +34,22 @@
 .wprtc_contributor_details p{
   display: inline-block;
 }
+
+
+@media (max-width: 576px) {
+
+  .wprtc_contributor_gravatar {
+    width: 25%;
+  }
+
+  .wprtc_contributor_details {
+    width: 60%;
+    margin-left: 20px;
+  }
+
+  .wprtc_contributor_details p{
+    word-break: break-all;
+  }
+
+
+}

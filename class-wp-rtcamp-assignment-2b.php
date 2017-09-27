@@ -41,7 +41,7 @@ class Wp_Rtcamp_Assignment_2b {
 	 */
 	public function __construct() {
 		global $wp_filter;
-		add_action( 'admin_init', array( $this, 'wprtc_admin_init' ), 1 );
+		add_action( 'admin_init', array( $this, 'wprtc_simulate_admin_init' ), 1 );
 		add_action( 'wprtc_admin_init', array( $this, 'wprtc_setup_contributors_metabox' ), 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'wprtc_init_front_end_assets' ) );
@@ -55,7 +55,7 @@ class Wp_Rtcamp_Assignment_2b {
 	 *
 	 * @since 0.1
 	 */
-	public function wprtc_admin_init() {
+	public function wprtc_simulate_admin_init() {
 		do_action( 'wprtc_admin_init' );
 	}
 	/**

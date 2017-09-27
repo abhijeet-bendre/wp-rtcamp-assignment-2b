@@ -40,13 +40,24 @@ class Wp_Rtcamp_Assignment_2b {
 	 * @since 0.1
 	 */
 	public function __construct() {
-		add_action( 'admin_init', array( $this, 'wprtc_setup_contributors_metabox' ) );
+		global $wp_filter;
+		add_action( 'admin_init', array( $this, 'wprtc_admin_init' ), 1 );
+		add_action( 'wprtc_admin_init', array( $this, 'wprtc_setup_contributors_metabox' ), 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'wprtc_init_front_end_assets' ) );
 		// Filter for appending contributors box on frontend.
 		add_filter( 'the_content', array( $this, 'wprtc_append_contributors' ), 20 );
+
 	}
 
+	/**
+	 * Enqueue assets such as JS/CSS, required by plugin
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_admin_init() {
+		do_action( 'wprtc_admin_init' );
+	}
 	/**
 	 * Enqueue assets such as JS/CSS, required by plugin
 	 *
@@ -92,23 +103,28 @@ class Wp_Rtcamp_Assignment_2b {
 	 * @since 0.1
 	 */
 	public function wprtc_setup_contributors_metabox() {
+		add_meta_box( 'wprtc_contributors',  __( 'Contributors', 'wprtc_assignment_2b' ), array( $this, 'wprtc_render_contributors_metabox' ), 'post', 'normal', 'low' );
+		// 'save_post' callback for saving selected_contributors.
+		add_action( 'save_post', array( $this, 'wprtc_save_selected_contributors' ), 10 );
+	}
+
+	/**
+	 * Show Metabox and hook 'save_post' only for author, editor, admin.
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_show_contributors_metabox_to_whitelist_users() {
 
 		$whitelist_user_roles = array( 'author', 'editor', 'administrator' );
 		$user = wp_get_current_user();
 		$show_metabox = false;
+		$user = wp_get_current_user();
 		foreach ( $whitelist_user_roles as $role ) {
 			if ( in_array( $role, (array) $user->roles, true ) && false === $show_metabox ) {
 					$show_metabox = true;
 			}
 		}
-
-		// Show Metabox and hook 'save_post' only for author, editor, admin.
-		if ( $show_metabox ) {
-			add_meta_box( 'wprtc_contributors',  __( 'Contributors', 'wprtc_assignment_2b' ), array( $this, 'wprtc_render_contributors_metabox' ), 'post', 'normal', 'low' );
-
-			// 'save_post' callback for saving selected_contributors.
-			add_action( 'save_post', array( $this, 'wprtc_save_selected_contributors' ), 10 );
-		}
+		return $show_metabox;
 	}
 
 	/**
@@ -118,10 +134,18 @@ class Wp_Rtcamp_Assignment_2b {
 	 */
 	public function wprtc_render_contributors_metabox() {
 		global $post;
+
+		$show_metabox = $this->wprtc_show_contributors_metabox_to_whitelist_users();
+		// Show Metabox and hook 'save_post' only for author, editor, admin.
+		if ( ! $show_metabox ) {
+			return;
+		}
+
 		$all_users = get_users();
 		$contributors_nonce = wp_create_nonce( '_wprtc_contributor_metabox_nonce' );
 
 		$post_contributors = get_post_meta( $post->ID, '_wprtc_contributors' );
+
 		if ( ! empty( $post_contributors ) ) {
 			$post_contributors = $post_contributors[0];
 		}
@@ -167,13 +191,19 @@ class Wp_Rtcamp_Assignment_2b {
 		global $post;
 		$wprtc_post_contributors = array();
 
+		$show_metabox = $this->wprtc_show_contributors_metabox_to_whitelist_users();
+
 		/*
 		* If doing auto save return.
 		* or
 		* Verify Nonce, if not verified return.
+		* or
+		* Show Metabox and hook 'save_post' only for author, editor, admin.
 		*/
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) ||
-				 isset( $_POST['_wprtc_contributor_metabox_nonce'] ) && ! wp_verify_nonce( sanitize_key( $_POST['_wprtc_contributor_metabox_nonce'] ), '_wprtc_contributor_metabox_nonce' ) ) { // Input var okay.
+				 isset( $_POST['_wprtc_contributor_metabox_nonce'] ) && ! wp_verify_nonce( sanitize_key( $_POST['_wprtc_contributor_metabox_nonce'] ), '_wprtc_contributor_metabox_nonce' ) ||
+				 ( ! $show_metabox )
+			 ) { // Input var okay.
 			return;
 		}
 

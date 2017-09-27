@@ -107,9 +107,9 @@ class Wp_Rtcamp_Assignment_2b_Contributors_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test if selected contributors are not saved for blacklist user roles
+	 * Test if selected contributors are not saved for blacklisted user roles
 	 */
-	function test_if_selected_post_contributors_are_not_saved_for_blacklist_user_roles() {
+	function test_if_selected_post_contributors_are_not_saved_for_blacklisted_user_roles() {
 		// Simulate $_POST variable for save_post hook.
 		$_POST['post_type'] = 'post';
 

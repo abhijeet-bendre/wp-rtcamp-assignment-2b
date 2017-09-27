@@ -9,7 +9,8 @@
 /*
 Plugin Name: Assignment-2b: WordPress-Contributors Plugin
 Plugin URI:  http://tymescripts.com/rtCamp-assignment
-Description: WordPress-Contributors Plugin, adds a contributor metabox box with names and their Gravatars to posts section. Selected contributors are shown in frontend for posts for which they have contributed.
+Description: WordPress-Contributors Plugin, adds a new metabox, labeled "Contributors" to WordPress post-editor page. This metabox will display a list of authors (WordPress users) with their Gravatars and a checkbox for each author. Selected contributors are shown in frontend for posts for which they have contributed.
+
 Version:     0.1
 Author:      Abhijeet Bendre
 Author URI:  http://tymescripts.com

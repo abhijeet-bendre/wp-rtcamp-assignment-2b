@@ -13,8 +13,8 @@ From here: https://careers.rtcamp.com/wordpress-engineer/assignment/
 
 ###  Admin-Side:
 
-    Addd a new metabox, labeled "Contributors" to WordPress post-editor page. This metabox will display list of 
-    authors (wordpress users) with a checkbox for each author.
+    Adds a new metabox, labeled "Contributors" to WordPress post-editor page. This metabox will display list of 
+    authors (WordPress users) with a checkbox for each author.
     
     User (author/editor/admin) may tick one or more authors name from the list.
     
@@ -22,10 +22,9 @@ From here: https://careers.rtcamp.com/wordpress-engineer/assignment/
 
 ### Front-end:
 
-    This Plugin uses post-content filter "the_content". At the end of post, a box called "Contributors". 
-    is displayed.
+    At the end of the post, a box called "Contributors" is displayed.
     
-    Post contributor names with their Gravatars are shown and theire names are clickable and will link
+    Post contributor names with their Gravatars are shown and there names are clickable and will link
     to their respective "author" page.
 
 

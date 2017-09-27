@@ -1,4 +1,19 @@
-thead.wprtc_contributors_thead tr th,
-tbody.wprtc_contributors_tbody tr td {
+
+table.wprtc_contributors_table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+th.wprtc_table_cell_check{
+  width: 20px;
+}
+
+.wprtc_table_username {
+  padding: 10px;
+  word-wrap:break-word;
+}
+
+.wprtc_table_gravator {
+  text-align: center;
   padding: 10px;
 }

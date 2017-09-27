@@ -153,24 +153,24 @@ class Wp_Rtcamp_Assignment_2b {
 
 		if ( ! empty( $all_users ) ) {
 			ob_start();
-			echo "<table class='wprtc_contributors_table' cellspacing='0'>
+			echo "<table class='wprtc_contributors_table'>
 							<thead class='wprtc_contributors_thead'>
 								<tr>
-									<th scope='col'></th>
-					 				<th scope='col'>Name</th>
-					 				<th scope='col'>Gravatar</th>
+									<th class='wprtc_table_cell_check'></th>
+					 				<th>Name</th>
+					 				<th>Gravatar</th>
 								</tr>
 							</thead>
-							<tbody class='wprtc_contributors_tbody'>";
+						<tbody class='wprtc_contributors_tbody'>";
 			foreach ( $all_users as $single_user ) {
 				// Skip Post Author, since he is always a contributor.
 				if ( (int) $post->post_author !== $single_user->ID ) {
 					echo "<tr>
-        					<td class=''>
+        					<th>
 										<input type='checkbox' name='_wprtc_contributors[]' value='" . esc_attr( $single_user->ID ) . "' " . checked( in_array( (string) $single_user->ID, $post_contributors , true ), true, false ) . ">
-									</td>
-        					<td class=''>" . esc_html( $single_user->user_login ) . "</td>
-									<td class=''>" . get_avatar( $single_user->ID, 50 ) . '</td>
+									</th>
+        					<td class='wprtc_table_username'>" . esc_html( $single_user->user_login ) . "</td>
+									<td class='wprtc_table_gravator'>" . get_avatar( $single_user->ID, 50 ) . '</td>
         				</tr>';
 				}
 			}

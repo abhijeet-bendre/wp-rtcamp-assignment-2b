@@ -39,15 +39,15 @@
 @media all and ( max-width: 576px ) {
 
   .wprtc_contributor_gravatar {
-    width: 25%;
+	width: 25%;
   }
 
   .wprtc_contributor_details {
-    width: 60%;
-    margin-left: 20px;
+	width: 60%;
+	margin-left: 20px;
   }
 
   .wprtc_contributor_details p{
-    word-break: break-all;
+	word-break: break-all;
   }
 }

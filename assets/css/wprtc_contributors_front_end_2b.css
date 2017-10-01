@@ -36,7 +36,7 @@
 }
 
 
-@media all (max-width: 576px) {
+@media all and ( max-width: 576px ) {
 
   .wprtc_contributor_gravatar {
     width: 25%;
@@ -50,5 +50,4 @@
   .wprtc_contributor_details p{
     word-break: break-all;
   }
-
 }

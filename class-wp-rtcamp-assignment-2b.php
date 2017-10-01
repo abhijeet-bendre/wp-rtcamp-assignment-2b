@@ -158,9 +158,9 @@ class Wp_Rtcamp_Assignment_2b {
 							<thead class='wprtc_contributors_thead'>
 								<tr>
 									<th class='wprtc_table_cell_check'></th>
-					 				<th>Name</th>
-					 				<th>Gravatar</th>
-								</tr>
+					 				<th>" . esc_html__( 'Name', 'wprtc_assignment_2b' ) . '</th>
+									<th>' . esc_html__( 'Gravatar', 'wprtc_assignment_2b' ) . "</th>
+					 			</tr>
 							</thead>
 						<tbody class='wprtc_contributors_tbody'>";
 			foreach ( $all_users as $single_user ) {

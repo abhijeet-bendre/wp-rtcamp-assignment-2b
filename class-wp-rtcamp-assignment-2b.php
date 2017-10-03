@@ -42,6 +42,7 @@ class Wp_Rtcamp_Assignment_2b {
 	 */
 	public function __construct() {
 		global $wp_filter;
+		add_action( 'plugins_loaded', array( $this, 'wprtc_load_plugin_textdomain' ) );
 		add_action( 'admin_init', array( $this, 'wprtc_simulate_admin_init' ), 1 );
 		add_action( 'wprtc_admin_init', array( $this, 'wprtc_setup_contributors_metabox' ), 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wprtc_init_assets' ) );
@@ -58,6 +59,15 @@ class Wp_Rtcamp_Assignment_2b {
 	 */
 	public function wprtc_simulate_admin_init() {
 		do_action( 'wprtc_admin_init' );
+	}
+
+	/**
+	 * Load the plugin's translated strings, if available.
+	 *
+	 * @since 0.1
+	 */
+	public function wprtc_load_plugin_textdomain() {
+		load_plugin_textdomain( 'wprtc_assignment_2b', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**

@@ -164,6 +164,19 @@ class Wp_Rtcamp_Assignment_2b {
 
 		if ( ! empty( $all_users ) ) {
 			ob_start();
+			/**
+			* Post Author is by default skipped from Contributor Box (The User who Drafts / Publishes the post).
+			* Contributors are additional users, apart from post Author. So If there are no Contributors, show a message to add them.
+			*/
+			$logged_in_user_id = get_current_user_id();
+			if ( 1 === count( $all_users ) && $all_users[0]->ID === $logged_in_user_id ) {
+				$admin_url = get_admin_url();
+				echo esc_html__( 'No Contributors Found! ', 'wprtc_assignment_2b' );
+				echo '<a target="_blank" href="' . esc_attr( $admin_url . 'users.php' ) . ' ">' . esc_html__( 'Please add from here', 'wprtc_assignment_2b' ) . '</a>';
+				ob_get_flush();
+				return;
+			}
+
 			echo "<table class='wprtc_contributors_table'>
 							<thead class='wprtc_contributors_thead'>
 								<tr>

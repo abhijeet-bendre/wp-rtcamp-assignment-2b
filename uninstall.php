@@ -23,5 +23,5 @@ function wprtc_contributors_delete_plugin_post_meta() {
 	}
 
 }
-define( 'WPRTC_CONTRIBUTORS_DELETE_ALL_DATA', true );
+
 wprtc_contributors_delete_plugin_post_meta();

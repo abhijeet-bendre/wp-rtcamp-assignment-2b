@@ -164,6 +164,7 @@ class Wp_Rtcamp_Assignment_2b {
 
 		if ( ! empty( $all_users ) ) {
 			ob_start();
+
 			/**
 			* Post Author is by default skipped from Contributor Box (The User who Drafts / Publishes the post).
 			* Contributors are additional users, apart from post Author. So If there are no Contributors, show a message to add them.

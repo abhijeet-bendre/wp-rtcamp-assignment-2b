@@ -29,3 +29,11 @@ msgstr ""
 #: class-wp-rtcamp-assignment-2b.php:162
 msgid "Gravatar"
 msgstr ""
+
+#: class-wp-rtcamp-assignment-2b.php:175
+msgid "No Contributors Found! "
+msgstr ""
+
+#: class-wp-rtcamp-assignment-2b.php:176
+msgid "Please add from here"
+msgstr ""
